@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Klyp - Turn Words Into Videos</title>
+  <meta name="description" content="Create stunning animated videos from text prompts. No video editing skills needed.">
+  
+  <!-- Preconnect to CDNs -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- Fonts - Distinctive choices -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Smooth scroll wrapper -->
+  <div id="smooth-wrapper">
+    <div id="smooth-content">
+      
+      <!-- Navigation -->
+      <nav class="nav">
+        <div class="nav-inner">
+          <a href="#" class="nav-logo">
+            <svg class="logo-svg" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Back frame - top right, lighter -->
+              <rect class="logo-frame-back" x="9" y="2" width="37" height="37" rx="10" fill="#f87171"/>
+              <!-- Front frame - bottom left, primary -->
+              <rect class="logo-frame-front" x="2" y="9" width="37" height="37" rx="10" fill="#dc2626"/>
+              <!-- Play icon - centered in front frame, with stroke -->
+              <path class="logo-play" d="M15 20 L28 27.5 L15 35 Z" fill="white" stroke="white" stroke-width="3" stroke-linejoin="round"/>
+            </svg>
+            <span class="logo-text">Klyp</span>
+          </a>
+          <div class="nav-links">
+            <a href="#features" class="nav-link">Features</a>
+            <a href="#how-it-works" class="nav-link">How it works</a>
+            <a href="#showcase" class="nav-link">Examples</a>
+          </div>
+          <a href="/app" class="nav-cta magnetic-btn">
+            <span>Get Started</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </nav>
+
+      <!-- Hero Section -->
+      <section class="hero" id="hero">
+        <!-- Animated background -->
+        <div class="hero-bg">
+          <div class="grid-pattern"></div>
+          <div class="gradient-orb gradient-orb-1"></div>
+          <div class="gradient-orb gradient-orb-2"></div>
+          <div class="gradient-orb gradient-orb-3"></div>
+          <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+          </div>
+        </div>
+        
+        <div class="hero-content">
+          <div class="hero-video-container">
+            <video class="hero-video" autoplay loop muted playsinline>
+              <source src="assets/herro-video.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+        
+        <div class="scroll-indicator">
+          <div class="scroll-line"></div>
+          <span>Scroll to explore</span>
+        </div>
+      </section>
+
+      <!-- Demo Section -->
+      <section class="demo" id="demo">
+        <div class="demo-container">
+          <div class="demo-header">
+            <span class="section-tag">See it in action</span>
+            <h2 class="section-title split-text">Type a prompt.<br>Get a video.</h2>
+          </div>
+          
+          <div class="demo-stage">
+            <!-- Centered Terminal (visible during typing) -->
+            <div class="demo-terminal-wrapper" id="terminal-wrapper">
+              <div class="demo-terminal">
+                <div class="terminal-header">
+                  <span class="terminal-dot"></span>
+                  <span class="terminal-dot"></span>
+                  <span class="terminal-dot"></span>
+                  <span class="terminal-title">prompt.txt</span>
+                </div>
+                <div class="terminal-body">
+                  <span class="terminal-prompt">$</span>
+                  <span class="typewriter-text" id="typewriter">Create an animated explainer about how solar panels convert sunlight into electricity...</span>
+                  <span class="terminal-cursor"></span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Video output (loading + result) -->
+            <div class="demo-output-wrapper" id="output-wrapper">
+              <div class="demo-video-frame">
+                <div class="video-loading" id="video-loading">
+                  <div class="loading-ring"></div>
+                  <span>Klyp is creating your video...</span>
+                </div>
+                <div class="video-result" id="video-result">
+                  <div class="result-scene">
+                    <!-- Video player mockup -->
+                    <div class="scene-video-player">
+                      <!-- Animated gradient background -->
+                      <div class="scene-gradient-bg"></div>
+                      
+                      <!-- Animated shapes -->
+                      <div class="scene-shapes">
+                        <div class="shape-circle"></div>
+                        <div class="shape-ring"></div>
+                        <div class="shape-dots">
+                          <span></span><span></span><span></span>
+                        </div>
+                      </div>
+                      
+                      <!-- Central icon animation -->
+                      <div class="scene-icon">
+                        <svg viewBox="0 0 80 80" fill="none">
+                          <circle class="icon-ring" cx="40" cy="40" r="35" stroke="url(#iconGrad)" stroke-width="2"/>
+                          <path class="icon-bolt" d="M44 20L28 44h12l-4 16 16-24H40l4-16z" fill="url(#boltGrad)"/>
+                          <defs>
+                            <linearGradient id="iconGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stop-color="#fbbf24"/>
+                              <stop offset="100%" stop-color="#dc2626"/>
+                            </linearGradient>
+                            <linearGradient id="boltGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stop-color="#fbbf24"/>
+                              <stop offset="100%" stop-color="#f59e0b"/>
+                            </linearGradient>
+                          </defs>
+                        </svg>
+                      </div>
+                      
+                      <!-- Animated text lines -->
+                      <div class="scene-content">
+                        <div class="content-title">Solar Energy</div>
+                        <div class="content-subtitle">How it works</div>
+                      </div>
+                      
+                      <!-- Progress bar -->
+                      <div class="scene-progress">
+                        <div class="progress-track">
+                          <div class="progress-fill"></div>
+                        </div>
+                        <span class="progress-time">0:42</span>
+                      </div>
+                      
+                      <!-- Floating particles -->
+                      <div class="scene-particles-new">
+                        <span></span><span></span><span></span><span></span><span></span><span></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- How It Works -->
+      <section class="how-it-works" id="how-it-works">
+        <div class="hiw-container">
+          <div class="hiw-header">
+            <span class="section-tag">Simple process</span>
+            <h2 class="section-title split-text">Three steps to<br>animated brilliance</h2>
+          </div>
+          
+          <div class="hiw-steps">
+            <!-- Step 1 -->
+            <div class="hiw-step" data-step="1">
+              <div class="step-number">01</div>
+              <div class="step-visual">
+                <div class="step-icon">
+                  <svg viewBox="0 0 64 64" fill="none">
+                    <rect x="8" y="16" width="48" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                    <path d="M16 28h32M16 36h24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <circle class="cursor-blink" cx="42" cy="36" r="2" fill="#dc2626"/>
+                  </svg>
+                </div>
+                <div class="step-particles">
+                  <span></span><span></span><span></span>
+                </div>
+              </div>
+              <div class="step-content">
+                <h3 class="step-title">Describe</h3>
+                <p class="step-desc">Tell Klyp what you want to explain. Use natural language - no technical jargon needed.</p>
+              </div>
+            </div>
+            
+            <!-- Step 2 -->
+            <div class="hiw-step" data-step="2">
+              <div class="step-number">02</div>
+              <div class="step-visual">
+                <div class="step-icon ai-brain">
+                  <svg viewBox="0 0 64 64" fill="none">
+                    <circle cx="32" cy="32" r="20" stroke="currentColor" stroke-width="2"/>
+                    <circle class="pulse-1" cx="32" cy="32" r="12" stroke="#dc2626" stroke-width="1"/>
+                    <circle class="pulse-2" cx="32" cy="32" r="6" fill="#dc2626"/>
+                    <path class="node-line" d="M32 12v8M32 44v8M12 32h8M44 32h8" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                </div>
+                <div class="neural-nodes">
+                  <span></span><span></span><span></span><span></span>
+                </div>
+              </div>
+              <div class="step-content">
+                <h3 class="step-title">Generate</h3>
+                <p class="step-desc">Klyp writes the script, generates voiceover, and creates smooth animations automatically.</p>
+              </div>
+            </div>
+            
+            <!-- Step 3 -->
+            <div class="hiw-step" data-step="3">
+              <div class="step-number">03</div>
+              <div class="step-visual">
+                <div class="step-icon">
+                  <svg viewBox="0 0 64 64" fill="none">
+                    <rect x="12" y="8" width="40" height="48" rx="4" stroke="currentColor" stroke-width="2"/>
+                    <path class="download-arrow" d="M32 24v16M24 36l8 8 8-8" stroke="#dc2626" stroke-width="2" stroke-linecap="round"/>
+                    <rect x="20" y="44" width="24" height="4" rx="2" fill="currentColor" opacity="0.3"/>
+                  </svg>
+                </div>
+                <div class="file-appear">
+                  <span class="file-icon">MP4</span>
+                </div>
+              </div>
+              <div class="step-content">
+                <h3 class="step-title">Export</h3>
+                <p class="step-desc">Download your video in one click. Share anywhere - social media, presentations, websites.</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="hiw-connector">
+            <svg class="connector-line" viewBox="0 0 800 100" preserveAspectRatio="none">
+              <path d="M0 50 Q200 20 400 50 T800 50" stroke="url(#connector-gradient)" stroke-width="2" fill="none"/>
+              <defs>
+                <linearGradient id="connector-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#dc2626" stop-opacity="0"/>
+                  <stop offset="50%" stop-color="#dc2626" stop-opacity="1"/>
+                  <stop offset="100%" stop-color="#dc2626" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Grid -->
+      <section class="features" id="features">
+        <div class="features-container">
+          <div class="features-header">
+            <span class="section-tag">Capabilities</span>
+            <h2 class="section-title split-text">Everything you need<br>to create magic</h2>
+          </div>
+          
+          <div class="features-grid">
+            <div class="feature-card" data-feature="script">
+              <div class="feature-icon">
+                <svg viewBox="0 0 48 48" fill="none">
+                  <path d="M8 8h32v32H8z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M14 16h20M14 24h16M14 32h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <circle cx="38" cy="10" r="6" fill="#dc2626"/>
+                  <path d="M36 10l2 2 4-4" stroke="white" stroke-width="1.5"/>
+                </svg>
+              </div>
+              <h3 class="feature-title">Klyp Script Writing</h3>
+              <p class="feature-desc">Intelligent scripts tailored to your audience and topic depth.</p>
+              <div class="feature-glow"></div>
+            </div>
+            
+            <div class="feature-card" data-feature="voice">
+              <div class="feature-icon">
+                <svg viewBox="0 0 48 48" fill="none">
+                  <rect x="18" y="8" width="12" height="24" rx="6" stroke="currentColor" stroke-width="2"/>
+                  <path d="M12 24c0 6.627 5.373 12 12 12s12-5.373 12-12" stroke="currentColor" stroke-width="2"/>
+                  <path d="M24 36v8M18 44h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path class="sound-wave" d="M8 20v8M40 20v8M4 22v4M44 22v4" stroke="#dc2626" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3 class="feature-title">Voice Generation</h3>
+              <p class="feature-desc">Natural-sounding Klyp voiceover synced perfectly with visuals.</p>
+              <div class="feature-glow"></div>
+            </div>
+            
+            <div class="feature-card" data-feature="themes">
+              <div class="feature-icon">
+                <svg viewBox="0 0 48 48" fill="none">
+                  <circle cx="20" cy="20" r="12" stroke="currentColor" stroke-width="2"/>
+                  <circle cx="28" cy="20" r="12" stroke="#dc2626" stroke-width="2"/>
+                  <circle cx="24" cy="28" r="12" stroke="currentColor" stroke-width="2" opacity="0.5"/>
+                </svg>
+              </div>
+              <h3 class="feature-title">Multiple Themes</h3>
+              <p class="feature-desc">Minimal, playful, corporate, educational - pick your style.</p>
+              <div class="feature-glow"></div>
+            </div>
+            
+            <div class="feature-card" data-feature="export">
+              <div class="feature-icon">
+                <svg viewBox="0 0 48 48" fill="none">
+                  <rect x="8" y="8" width="32" height="32" rx="4" stroke="currentColor" stroke-width="2"/>
+                  <path d="M24 16v12M18 24l6 6 6-6" stroke="#dc2626" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M16 34h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3 class="feature-title">One-Click Export</h3>
+              <p class="feature-desc">Download MP4 instantly. No rendering queues or waiting.</p>
+              <div class="feature-glow"></div>
+            </div>
+            
+            <div class="feature-card feature-card-wide" data-feature="edit">
+              <div class="feature-icon">
+                <svg viewBox="0 0 48 48" fill="none">
+                  <rect x="4" y="12" width="40" height="24" rx="2" stroke="currentColor" stroke-width="2"/>
+                  <rect x="8" y="16" width="16" height="16" rx="1" fill="#dc2626" opacity="0.2" stroke="#dc2626"/>
+                  <path d="M32 20h8M32 24h6M32 28h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <h3 class="feature-title">Scene-by-Scene Editing</h3>
+              <p class="feature-desc">Preview each scene, request changes via chat, and refine until perfect.</p>
+              <div class="feature-glow"></div>
+            </div>
+            
+            <div class="feature-card feature-card-wide" data-feature="nocode">
+              <div class="feature-icon">
+                <svg viewBox="0 0 48 48" fill="none">
+                  <circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2"/>
+                  <path d="M16 24l6 6 10-12" stroke="#dc2626" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h3 class="feature-title">No Video Skills Needed</h3>
+              <p class="feature-desc">If you can type, you can create professional animated videos. Really.</p>
+              <div class="feature-glow"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Showcase Section -->
+      <section class="showcase" id="showcase">
+        <div class="showcase-header">
+          <span class="section-tag">Examples</span>
+          <h2 class="section-title split-text">Made with Klyp</h2>
+        </div>
+        
+        <div class="showcase-carousel">
+          <div class="carousel-track">
+            <!-- Showcase Item 1 -->
+            <div class="showcase-item">
+              <div class="showcase-video">
+                <video class="showcase-video-player" preload="metadata">
+                  <source src="assets/what-is-an-API.mp4#t=4" type="video/mp4">
+                </video>
+                <div class="video-play-overlay">
+                  <button class="play-button" aria-label="Play video">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="24" cy="24" r="22" stroke="white" stroke-width="2" fill="rgba(0,0,0,0.4)"/>
+                      <path d="M18 14 L34 24 L18 34 Z" fill="white"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="showcase-info">
+                <span class="showcase-category">Tech</span>
+                <h4>What is an API?</h4>
+              </div>
+            </div>
+            
+            <!-- Showcase Item 2 -->
+            <div class="showcase-item">
+              <div class="showcase-video">
+                <video class="showcase-video-player" preload="metadata">
+                  <source src="assets/why-12-months.mp4#t=4" type="video/mp4">
+                </video>
+                <div class="video-play-overlay">
+                  <button class="play-button" aria-label="Play video">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="24" cy="24" r="22" stroke="white" stroke-width="2" fill="rgba(0,0,0,0.4)"/>
+                      <path d="M18 14 L34 24 L18 34 Z" fill="white"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="showcase-info">
+                <span class="showcase-category">Education</span>
+                <h4>Why 12 Months?</h4>
+              </div>
+            </div>
+            
+            <!-- Showcase Item 3 -->
+            <div class="showcase-item">
+              <div class="showcase-video">
+                <video class="showcase-video-player" preload="metadata">
+                  <source src="assets/what-is-a-gpu.mp4#t=4" type="video/mp4">
+                </video>
+                <div class="video-play-overlay">
+                  <button class="play-button" aria-label="Play video">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="24" cy="24" r="22" stroke="white" stroke-width="2" fill="rgba(0,0,0,0.4)"/>
+                      <path d="M18 14 L34 24 L18 34 Z" fill="white"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="showcase-info">
+                <span class="showcase-category">Tech</span>
+                <h4>What is a GPU?</h4>
+              </div>
+            </div>
+            
+            <!-- Showcase Item 4 -->
+            <div class="showcase-item">
+              <div class="showcase-video">
+                <video class="showcase-video-player" preload="metadata">
+                  <source src="assets/speed-of-light.mp4#t=4" type="video/mp4">
+                </video>
+                <div class="video-play-overlay">
+                  <button class="play-button" aria-label="Play video">
+                    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="24" cy="24" r="22" stroke="white" stroke-width="2" fill="rgba(0,0,0,0.4)"/>
+                      <path d="M18 14 L34 24 L18 34 Z" fill="white"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <div class="showcase-info">
+                <span class="showcase-category">Science</span>
+                <h4>Speed of Light</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </section>
+
+      <!-- Final CTA -->
+      <section class="final-cta" id="cta">
+        <div class="cta-bg">
+          <div class="cta-glow"></div>
+          <div class="cta-particles">
+            <span></span><span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        
+        <div class="cta-content">
+          <div class="cta-logo">
+            <svg class="logo-svg-large" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect class="logo-frame-back" x="9" y="2" width="37" height="37" rx="10" fill="#f87171"/>
+              <rect class="logo-frame-front" x="2" y="9" width="37" height="37" rx="10" fill="#dc2626"/>
+              <path class="logo-play" d="M15 20 L28 27.5 L15 35 Z" fill="white" stroke="white" stroke-width="3" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          
+          <h2 class="cta-title split-text">Ready to create?</h2>
+          <p class="cta-subtitle">Join thousands turning ideas into animated videos.</p>
+          
+          <a href="/app" class="btn-primary btn-large magnetic-btn">
+            <span class="btn-text">Start Creating Now</span>
+            <span class="btn-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </span>
+            <span class="btn-glow"></span>
+          </a>
+          
+          <p class="cta-note">Transform your ideas into stunning videos</p>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="footer-inner">
+          <div class="footer-brand">
+            <svg class="footer-logo" viewBox="0 0 48 48" fill="none">
+              <rect x="9" y="2" width="37" height="37" rx="10" fill="#f87171"/>
+              <rect x="2" y="9" width="37" height="37" rx="10" fill="#dc2626"/>
+              <path d="M15 20 L28 27.5 L15 35 Z" fill="white" stroke="white" stroke-width="3" stroke-linejoin="round"/>
+            </svg>
+            <span>Klyp</span>
+          </div>
+          <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Contact</a>
+          </div>
+          <p class="footer-copy">&copy; 2026 Klyp. All rights reserved.</p>
+        </div>
+      </footer>
+      
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/split-type"></script>
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

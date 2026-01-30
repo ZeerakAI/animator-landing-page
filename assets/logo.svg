@@ -1,0 +1,31 @@
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .frame-back {
+      animation: frameBack 3s ease-in-out infinite;
+    }
+    .frame-front {
+      animation: frameFront 3s ease-in-out infinite;
+    }
+    .play-icon {
+      animation: playPulse 3s ease-in-out infinite;
+    }
+    @keyframes frameBack {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(3px, -3px); }
+    }
+    @keyframes frameFront {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-1px, 1px); }
+    }
+    @keyframes playPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+  </style>
+  <!-- Back frame - top right, lighter red -->
+  <rect class="frame-back" x="9" y="2" width="37" height="37" rx="10" fill="#f87171"/>
+  <!-- Front frame - bottom left, primary red -->
+  <rect class="frame-front" x="2" y="9" width="37" height="37" rx="10" fill="#dc2626"/>
+  <!-- Play icon - centered with rounded corners -->
+  <path class="play-icon" d="M15 20 L28 27.5 L15 35 Z" fill="white" stroke="white" stroke-width="3" stroke-linejoin="round"/>
+</svg>
