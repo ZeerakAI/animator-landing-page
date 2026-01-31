@@ -466,112 +466,7 @@ const initShowcase = () => {
     });
   });
 
-  // Video playback functionality
-  const setupVideoPlayback = () => {
-    items.forEach(item => {
-      const videoContainer = item.querySelector('.showcase-video');
-      const video = item.querySelector('.showcase-video-player');
-      const playButton = item.querySelector('.play-button');
-      const playButtonSvg = playButton.querySelector('svg');
-      
-      if (!video || !playButton) return;
-
-      // Seek video forward to show a visible frame as thumbnail
-      let isFirstPlay = true;
-      
-      const setVideoThumbnail = () => {
-        if (video.duration > 4) {
-          video.currentTime = 4;
-        }
-      };
-      
-      video.addEventListener('loadedmetadata', setVideoThumbnail);
-      // Also try immediately in case metadata is already loaded
-      if (video.readyState >= 1) {
-        setVideoThumbnail();
-      }
-
-      const playIconPath = 'M18 14 L34 24 L18 34 Z';
-      const pauseIconPath = 'M16 14h6v20h-6zM26 14h6v20h-6z';
-      
-      // Reset to beginning when video ends
-      video.addEventListener('ended', () => {
-        isFirstPlay = true;
-        setVideoThumbnail();
-      });
-
-      const updateButtonIcon = () => {
-        const pathElement = playButtonSvg.querySelector('path');
-        if (video.paused) {
-          pathElement.setAttribute('d', playIconPath);
-        } else {
-          pathElement.setAttribute('d', pauseIconPath);
-        }
-      };
-
-      const togglePlay = () => {
-        if (video.paused) {
-          // Pause all other videos
-          document.querySelectorAll('.showcase-video-player').forEach(v => {
-            if (v !== video) {
-              v.pause();
-              v.closest('.showcase-video').classList.remove('playing');
-              const otherButton = v.closest('.showcase-video').querySelector('.play-button svg path');
-              if (otherButton) {
-                otherButton.setAttribute('d', playIconPath);
-              }
-            }
-          });
-          
-          // Start from beginning on first play
-          if (isFirstPlay) {
-            video.currentTime = 0;
-            isFirstPlay = false;
-          }
-          
-          video.play();
-          videoContainer.classList.add('playing');
-        } else {
-          video.pause();
-          videoContainer.classList.remove('playing');
-        }
-        updateButtonIcon();
-      };
-
-      const overlay = videoContainer.querySelector('.video-play-overlay');
-
-      // Click on play/pause button
-      playButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        togglePlay();
-      });
-
-      // Click on overlay (but not button)
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) {
-          e.preventDefault();
-          e.stopPropagation();
-          togglePlay();
-        }
-      });
-
-      // Click on video element itself to pause
-      video.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        togglePlay();
-      });
-
-      // Video ended
-      video.addEventListener('ended', () => {
-        videoContainer.classList.remove('playing');
-        updateButtonIcon();
-      });
-    });
-  };
-
-  setupVideoPlayback();
+  // Video click opens modal (handled by initVideoModal)
 };
 
 /* ============================================
@@ -636,17 +531,61 @@ const initFinalCTA = () => {
    ============================================ */
 const initMagneticButtons = () => {
   const buttons = document.querySelectorAll('.magnetic-btn');
+  const magneticRadius = 150; // Distance in pixels to start the magnetic effect
+  const pullStrength = 0.4; // How strongly the button pulls (0-1)
   
   buttons.forEach(button => {
+    let isInProximity = false;
+    
+    // Track mouse movement globally for proximity detection
+    const handleGlobalMouseMove = (e) => {
+      const rect = button.getBoundingClientRect();
+      const buttonCenterX = rect.left + rect.width / 2;
+      const buttonCenterY = rect.top + rect.height / 2;
+      
+      // Calculate distance from mouse to button center
+      const distanceX = e.clientX - buttonCenterX;
+      const distanceY = e.clientY - buttonCenterY;
+      const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+      
+      if (distance < magneticRadius) {
+        isInProximity = true;
+        
+        // Calculate pull strength based on distance (closer = stronger)
+        const strength = (1 - distance / magneticRadius) * pullStrength;
+        
+        // Move button toward mouse
+        gsap.to(button, {
+          x: distanceX * strength,
+          y: distanceY * strength,
+          scale: 1 + (strength * 0.1),
+          duration: 0.3,
+          ease: 'power2.out'
+        });
+      } else if (isInProximity) {
+        // Mouse left proximity zone, reset button
+        isInProximity = false;
+        gsap.to(button, {
+          x: 0,
+          y: 0,
+          scale: 1,
+          duration: 0.6,
+          ease: 'elastic.out(1, 0.4)'
+        });
+      }
+    };
+    
+    // Direct hover - stronger effect when directly on button
     button.addEventListener('mousemove', (e) => {
       const rect = button.getBoundingClientRect();
       const x = e.clientX - rect.left - rect.width / 2;
       const y = e.clientY - rect.top - rect.height / 2;
       
       gsap.to(button, {
-        x: x * 0.3,
-        y: y * 0.3,
-        duration: 0.3,
+        x: x * 0.35,
+        y: y * 0.35,
+        scale: 1.05,
+        duration: 0.2,
         ease: 'power2.out'
       });
     });
@@ -655,10 +594,14 @@ const initMagneticButtons = () => {
       gsap.to(button, {
         x: 0,
         y: 0,
-        duration: 0.5,
-        ease: 'elastic.out(1, 0.5)'
+        scale: 1,
+        duration: 0.6,
+        ease: 'elastic.out(1, 0.4)'
       });
     });
+    
+    // Add global listener for proximity effect
+    document.addEventListener('mousemove', handleGlobalMouseMove);
   });
 };
 
@@ -669,3 +612,151 @@ const initMagneticButtons = () => {
 if (typeof SplitType === 'undefined') {
   console.warn('SplitType not loaded, text animations will be simplified');
 }
+
+/* ============================================
+   VIDEO MODAL
+   ============================================ */
+const initVideoModal = () => {
+  const modal = document.getElementById('video-modal');
+  const modalVideo = document.getElementById('modal-video');
+  const modalBackdrop = modal.querySelector('.modal-backdrop');
+  const modalClose = modal.querySelector('.modal-close');
+  const modalPrev = modal.querySelector('.modal-prev');
+  const modalNext = modal.querySelector('.modal-next');
+  const modalPlayBtn = modal.querySelector('.modal-play-btn');
+  const progressBar = modal.querySelector('.progress-bar');
+  const progressFilled = modal.querySelector('.progress-filled');
+  const timeDisplay = modal.querySelector('.time-display');
+  const modalCategory = modal.querySelector('.modal-category');
+  const modalTitle = modal.querySelector('.modal-title');
+  
+  const showcaseItems = document.querySelectorAll('.showcase-item');
+  let currentIndex = 0;
+  
+  const videoData = Array.from(showcaseItems).map(item => ({
+    src: item.querySelector('source').src,
+    category: item.querySelector('.showcase-category').textContent,
+    title: item.querySelector('h4').textContent
+  }));
+  
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+  
+  const updateProgress = () => {
+    const percent = (modalVideo.currentTime / modalVideo.duration) * 100;
+    progressFilled.style.width = `${percent}%`;
+    timeDisplay.textContent = `${formatTime(modalVideo.currentTime)} / ${formatTime(modalVideo.duration || 0)}`;
+  };
+  
+  const openModal = (index) => {
+    currentIndex = index;
+    const data = videoData[index];
+    
+    modalVideo.querySelector('source').src = data.src;
+    modalVideo.load();
+    modalCategory.textContent = data.category;
+    modalTitle.textContent = data.title;
+    
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Auto-play after a brief delay
+    setTimeout(() => {
+      modalVideo.play();
+      modalPlayBtn.classList.add('playing');
+    }, 300);
+  };
+  
+  const closeModal = () => {
+    modalVideo.pause();
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+    modalPlayBtn.classList.remove('playing');
+    progressFilled.style.width = '0%';
+  };
+  
+  const navigateVideo = (direction) => {
+    modalVideo.pause();
+    currentIndex = (currentIndex + direction + videoData.length) % videoData.length;
+    const data = videoData[currentIndex];
+    
+    modalVideo.querySelector('source').src = data.src;
+    modalVideo.load();
+    modalCategory.textContent = data.category;
+    modalTitle.textContent = data.title;
+    
+    modalVideo.play();
+    modalPlayBtn.classList.add('playing');
+  };
+  
+  const togglePlay = () => {
+    if (modalVideo.paused) {
+      modalVideo.play();
+      modalPlayBtn.classList.add('playing');
+    } else {
+      modalVideo.pause();
+      modalPlayBtn.classList.remove('playing');
+    }
+  };
+  
+  // Click on showcase items to open modal
+  showcaseItems.forEach((item, index) => {
+    item.style.cursor = 'pointer';
+    item.addEventListener('click', () => {
+      openModal(index);
+    });
+  });
+  
+  // Modal controls
+  modalClose.addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', closeModal);
+  modalPrev.addEventListener('click', () => navigateVideo(-1));
+  modalNext.addEventListener('click', () => navigateVideo(1));
+  modalPlayBtn.addEventListener('click', togglePlay);
+  
+  // Click on video to toggle play
+  modalVideo.addEventListener('click', togglePlay);
+  
+  // Progress bar click to seek
+  progressBar.addEventListener('click', (e) => {
+    const rect = progressBar.getBoundingClientRect();
+    const percent = (e.clientX - rect.left) / rect.width;
+    modalVideo.currentTime = percent * modalVideo.duration;
+  });
+  
+  // Update progress bar
+  modalVideo.addEventListener('timeupdate', updateProgress);
+  modalVideo.addEventListener('loadedmetadata', updateProgress);
+  
+  // Video ended
+  modalVideo.addEventListener('ended', () => {
+    modalPlayBtn.classList.remove('playing');
+  });
+  
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (!modal.classList.contains('active')) return;
+    
+    switch (e.key) {
+      case 'Escape':
+        closeModal();
+        break;
+      case 'ArrowLeft':
+        navigateVideo(-1);
+        break;
+      case 'ArrowRight':
+        navigateVideo(1);
+        break;
+      case ' ':
+        e.preventDefault();
+        togglePlay();
+        break;
+    }
+  });
+};
+
+// Initialize modal when DOM is ready
+document.addEventListener('DOMContentLoaded', initVideoModal);
